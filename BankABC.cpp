@@ -207,7 +207,7 @@ void sortAccounts(BankAccount ** list)
 
 
 
-//*test*
+
 
 
 
@@ -252,16 +252,15 @@ BankAccount ** readAccounts()
         // YOU HAVE TO DO SOMETHING FROM HERE !!!
 	
 
+          cout << accountRead << endl;
+          cout << TypeRead << endl; 
+          cout << dateRead << endl; 
+          cout << balanceRead << endl; 
+          cout << nbyearRead << endl; 
+          cout << RateRead << endl; 
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
+          
 	
 	
 
@@ -401,22 +400,21 @@ void displayAccounts(BankAccount ** listAccounts)
     cout << endl << endl << endl;
     
     Bool find[K_SizeMax];
-    for(int k = 0; k < K_SizeMax; k++) {find[k] = FALSE;}
+    for(int k = 0; k < K_SizeMax; k++) {
+         find[k] = FALSE;
+         
+     }
 
     cout << "                       THE REPORT OF THE BANK ACCOUNTS OF CLIENTS" << endl;
-    cout << "                       ------------------------------------------" << endl << endl;
-	
+    cout << "                       ------------------------------------------" << endl << endl; 
     int i = 0;
-	
+    //while (i < K_SizeMax){
+         
+    //} 
 
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
 }
 
 
