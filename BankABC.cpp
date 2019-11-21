@@ -92,6 +92,7 @@ void BankAccount::print()
     cout << accountId << "\t\t\t" << type << "\t" << updateDate << "\t\t" << balance;
 }
 
+
 //******************************************************************
 // Basic functions of the DepositAccount class
 //******************************************************************
@@ -250,19 +251,19 @@ BankAccount ** readAccounts()
 	 
     while (inputFile && (counter < K_SizeMax - 1)){
         // YOU HAVE TO DO SOMETHING FROM HERE !!!
-	
-
-          cout << accountRead << endl;
-          cout << TypeRead << endl; 
-          cout << dateRead << endl; 
-          cout << balanceRead << endl; 
-          cout << nbyearRead << endl; 
-          cout << RateRead << endl; 
-	
-	
+          if (TypeRead == 03 ) {
+               *pAccount = new DepositAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead, nbyearRead);   
+          }
+          else {
+               if (TypeRead == 04 ) {
+                    balanceRead = balanceRead + ((balanceRead * nbyearRead * RateRead) / 36000);
+                    *pAccount = new LoanAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead, nbyearRead, RateRead);
+               }
+               else {
+                    *pAccount = new BankAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead);
+               }
+          }          
           
-	
-	
 
         // UNTIL THIS POINT.
 
@@ -270,6 +271,7 @@ BankAccount ** readAccounts()
           inputFile.getline(nameRead, 60);
           pAccount++;
           counter++;
+
     }
      *pAccount = new BankAccount();
      return listAccounts;
@@ -395,8 +397,7 @@ void updateAccounts(BankAccount ** listAccounts) {
 // Inputs: listAccount (type: BankAccount *), the list of bank accounts.
 // Outputs: Nothing
 //******************************************************************************
-void displayAccounts(BankAccount ** listAccounts)
-{
+void displayAccounts(BankAccount ** listAccounts){
     cout << endl << endl << endl;
     
     Bool find[K_SizeMax];
@@ -408,12 +409,10 @@ void displayAccounts(BankAccount ** listAccounts)
     cout << "                       THE REPORT OF THE BANK ACCOUNTS OF CLIENTS" << endl;
     cout << "                       ------------------------------------------" << endl << endl; 
     int i = 0;
+    
     //while (i < K_SizeMax){
          
     //} 
-
-
-
 
 }
 
