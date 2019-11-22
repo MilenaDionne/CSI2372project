@@ -207,6 +207,7 @@ void sortAccounts(BankAccount ** listAccounts)
 {
      int i = 0; 
      BankAccount **temp; 
+     
      //sorting ascending order 
      //we need to get the id value of the double pointer listAccount and then use this code 
      for (i = 0; i < sizeof(listAccounts); i++){ 
@@ -286,9 +287,6 @@ BankAccount ** readAccounts()
 }
 
 
-
-
-
 //*****************************************************************************************
 // Purpose: This function validates whether the transaction code 
 //          corresponds to the correct account:
@@ -313,10 +311,6 @@ Bool BankAccount::validateTransaction(const Transaction trans) const
       }
         
 }
-
-
-
-
 
 //******************************************************************************
 // Purpose: This function is used to execute the transaction already performed 
@@ -431,6 +425,10 @@ void displayAccounts(BankAccount ** listAccounts){
 int main()
 {
     BankAccount ** list = readAccounts();
+    //cout << list << endl; 
+    //BankAccount *ptr = *list; 
+     //ptr->print(); 
+    
     sortAccounts(list);
     displayAccounts(list);
     updateAccounts(list);
