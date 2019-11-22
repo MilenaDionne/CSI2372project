@@ -203,17 +203,25 @@ inline void Transaction::setAmount(double amountTr)
 // Inputs: listAccount(BankAccount *), a list of bank accounts.
 // Outputs: listAccount(BankAccount *), sorted list of bank accounts.
 //****************************************************************************
-void sortAccounts(BankAccount ** list)
+void sortAccounts(BankAccount ** listAccounts)
 {
-
-
-
-
-
-
-
-
-
+     int i = 0; 
+     BankAccount **temp; 
+     //sorting ascending order 
+     //we need to get the id value of the double pointer listAccount and then use this code 
+     for (i = 0; i < sizeof(listAccounts); i++){ 
+          for (int j = 0; i < sizeof(listAccounts); i++){
+               temp = &listAccounts[i]; 
+               listAccounts[i] = listAccounts[j]; 
+               listAccounts[j] = *temp; 
+          }
+     }
+     //list Account = ascending list pointer to pointer 
+     cout << "print the adresses in ascending order" << endl; 
+     for (i = 0; i< sizeof(listAccounts); i++){
+          cout << &listAccounts[i] << "\t"; 
+     }
+      
 }
 
 //******************************************************************
@@ -410,9 +418,10 @@ void displayAccounts(BankAccount ** listAccounts){
     cout << "                       ------------------------------------------" << endl << endl; 
     int i = 0;
     
-    //while (i < K_SizeMax){
-         
-    //} 
+    //while (i < sizeof(listAccounts)-1){ //(7 account in .txt)
+     //    cout<< listAccounts[i]<< endl; //need to change -> don't know how to print values at this adresse, only adress printed
+     //    i++; 
+    //}
 
 }
 
