@@ -428,18 +428,21 @@ void displayAccounts(BankAccount **listAccounts)
 
 int main()
 {
-     BankAccount **list = readAccounts();
-     sortAccounts(list);
+    BankAccount ** list = readAccounts();
+    //cout << list << endl; 
+    //BankAccount *ptr = *list; 
+     //ptr->print(); 
+    
+    sortAccounts(list);
+    displayAccounts(list);
+    updateAccounts(list);
+    cout << endl << endl;
+    cout << "               ************************************************" << endl;
+    cout << "               * REAFFICHAGE DES DONNEES APRES LA MISE A JOUR *" << endl;
+    cout << "               ************************************************" << endl;
+    displayAccounts(list);
+    cout << endl;
 
-     //     displayAccounts(list);
-     //     updateAccounts(list);
-     //     cout << endl << endl;
-     //     cout << "               ************************************************" << endl;
-     //     cout << "               * REAFFICHAGE DES DONNEES APRES LA MISE A JOUR *" << endl;
-     //     cout << "               ************************************************" << endl;
-     //     displayAccounts(list);
-     //     cout << endl;
-
-     system("PAUSE");
-     return 0;
+	system("PAUSE");
+	return 0;
 }
