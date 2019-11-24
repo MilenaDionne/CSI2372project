@@ -218,7 +218,7 @@ void sortAccounts(BankAccount **listAccounts)
      for (int i = 0; listAccounts[i] && flag; i++)
      {
           flag = 0;
-          for (int j = 0; listAccounts[j+1]; j++)
+          for (int j = 0; listAccounts[j + 1]; j++)
           {
                if (listAccounts[j]->getAccountId() > listAccounts[j + 1]->getAccountId())
                {
@@ -387,49 +387,108 @@ void LoanAccount::executeTransaction(const Transaction trans)
 // Output: Nothing.
 //*************************************************************************
 
-
 void updateAccounts(BankAccount **listAccounts)
 {
 
      int flag = 1;
      ifstream inputFile("TRANSACT.txt"); // Opening the input file
-     if (!inputFile)                    // If the file is not found...
+     if (!inputFile)                     // If the file is not found...
      {
           cout << "File not found !!!" << endl;
           exit(0);
      }
 
      long accountRead, dateRead;
-     int TypeRead, nbyearRead, counter = 0;
-     double balanceRead, RateRead;
-     char nameRead[60];
+     int TypeRead, nbyearRead, transactionRead, counter = 0;
+     double balanceRead;
 
-     inputFile >> accountRead >> TypeRead >> dateRead >> balanceRead >> nbyearRead >> RateRead;
-     inputFile.getline(nameRead, 60);
+     inputFile >> accountRead >> TypeRead >> dateRead >> transactionRead >> balanceRead;
 
      while (inputFile && (counter < K_SizeMax - 1))
      {
-         for (int i = 0; listAccounts[i] && flag; i++) {
-             if(listAccounts[i]->getAccountId() == accountRead && listAccounts[i]->getType() == TypeRead) {
-                listAccounts[i]->setBalance(balanceRead);
-                listAccounts[i]->setUpdateDate(dateRead);
-                //downcasting
-             }
-         }
+          int flag = 1;
+          // checks for the account that matches the update file
+          for (int i = 0; listAccounts[i] && flag; i++)
+          {
+               BankAccount *currentVal = listAccounts[i];
+               if (currentVal->getAccountId() == accountRead && currentVal->getType() == TypeRead)
+               {
 
-         counter++;
+                    if (currentVal->isLoanAccount())
+                    {
+                         // can only do transaction type 1 (deposit) on loan accounts
+                         if (transactionRead != 1)
+                         {
+                              flag = 0;
+                              continue;
+                         }
+                         currentVal->setBalance(currentVal->getBalance() - balanceRead);
+                    }
+                    else if (currentVal->isDepositAccount())
+                    {
+                         // can only do transaction type 1 (deposit) on term accounts
+                         if (transactionRead != 1)
+                         {
+                              flag = 0;
+                              continue;
+                         }
+                         currentVal->setBalance(currentVal->getBalance() + balanceRead);
+                    }
+                    else if (currentVal->isCheckingAccount())
+                    {
+                         // cannot do transaction type 3 (check) on savings accounts
+                         if (transactionRead == 3)
+                         {
+                              flag = 0;
+                              continue;
+                         }
+                         else if (transactionRead == 2)
+                         { // withdrawl
+                              currentVal->setBalance(currentVal->getBalance() - balanceRead);
+                         }
+                         else if (transactionRead == 1)
+                         { // deposit
+                              currentVal->setBalance(currentVal->getBalance() + balanceRead);
+                         }
+                         // remove $0.50
+                         currentVal->setBalance(currentVal->getBalance() - 0.50);
+                    }
+                    else if (currentVal->isSavingsAccount())
+                    {
+                         if (transactionRead == 1)
+                         { // deposit
+                              currentVal->setBalance(currentVal->getBalance() + balanceRead);
+                         }
+                         else if (transactionRead == 2)
+                         { // withdrawl
+                              currentVal->setBalance(currentVal->getBalance() - balanceRead);
+                         }
+                         else if (transactionRead == 3)
+                         { // check
+                              currentVal->setBalance(currentVal->getBalance() - balanceRead);
+                         }
+                         // remove $0.50
+                         currentVal->setBalance(currentVal->getBalance() - 0.50);
+                    }
+               }
+          }
+          inputFile >> accountRead >> TypeRead >> dateRead >> transactionRead >> balanceRead;
+          counter++;
      }
-
 }
 
-BankAccount* runDynamicCast( BankAccount *currentVal ) {
-     if (currentVal->isLoanAccount()){
-          return dynamic_cast<LoanAccount *> (currentVal);
-     } else if (currentVal->isDepositAccount()){
-          return dynamic_cast<DepositAccount *> (currentVal);
+BankAccount *runDynamicCast(BankAccount *currentVal)
+{
+     if (currentVal->isLoanAccount())
+     {
+          return dynamic_cast<LoanAccount *>(currentVal);
      }
-     
-     return dynamic_cast<BankAccount *> (currentVal);
+     else if (currentVal->isDepositAccount())
+     {
+          return dynamic_cast<DepositAccount *>(currentVal);
+     }
+
+     return dynamic_cast<BankAccount *>(currentVal);
 }
 
 //******************************************************************************
@@ -455,51 +514,80 @@ void displayAccounts(BankAccount **listAccounts)
           << endl;
      int i = 0;
 
-     for (int i = 1; listAccounts[i]; i++) {
-          BankAccount *currentVal = runDynamicCast( listAccounts[i] );
+     for (int i = 1; listAccounts[i]; i++)
+     {
+          BankAccount *currentVal = runDynamicCast(listAccounts[i]);
 
-          cout << "Client Name: " <<  currentVal->getClientName() << endl << endl;
-          cout << "Bank Account" << "\t\t" << "Type" << "\t" << "Update Date" << "\t" << "Balance" << "\t\t" << "Nb.Years" << "\t" << "Rate" << endl;
-          cout << "-------------" << "\t\t" << "------" << "\t" << "-----------" << "\t" << "-------" << "\t\t" << "-----------" << "\t" << "------" << endl;
+          cout << "Client Name: " << currentVal->getClientName() << endl
+               << endl;
+          cout << "Bank Account"
+               << "\t\t"
+               << "Type"
+               << "\t"
+               << "Update Date"
+               << "\t"
+               << "Balance"
+               << "\t\t"
+               << "Nb.Years"
+               << "\t"
+               << "Rate" << endl;
+          cout << "-------------"
+               << "\t\t"
+               << "------"
+               << "\t"
+               << "-----------"
+               << "\t"
+               << "-------"
+               << "\t\t"
+               << "-----------"
+               << "\t"
+               << "------" << endl;
           currentVal->print();
-          cout << endl; 
+          cout << endl;
 
+          // must update this after printing for the case of deposit accounts updating their bonus
           double totalAccountValue = currentVal->getBalance();
-           
 
-          // This loop is meant to print out the subsequent elements of one client          
-          for (int j = i+1; listAccounts[j]; j++) {
-               if (listAccounts[i]->getAccountId() != listAccounts[j]->getAccountId()) {
+          // This loop is meant to print out the subsequent elements of one client
+          for (int j = i + 1; listAccounts[j]; j++)
+          {
+               if (listAccounts[i]->getAccountId() != listAccounts[j]->getAccountId())
+               {
                     break;
                }
-               currentVal = runDynamicCast( listAccounts[j] );
+               currentVal = runDynamicCast(listAccounts[j]);
 
                // Regular print all the values
                currentVal->print();
                cout << endl;
+
+               // must update this after printing for the case of deposit accounts updating their bonus
                totalAccountValue += currentVal->getBalance();
                i++;
           }
           cout << "\t\t\t\t\t        -------------" << endl;
-          cout << "\tTOTAL ACCOUNTS: " << totalAccountValue << endl << endl << endl;
+          cout << "\tTOTAL ACCOUNTS: " << totalAccountValue << endl
+               << endl
+               << endl;
      }
      cout << " THE REPORT OF THE BANK ACCOUNTS OF CLIENTS" << endl;
 }
 
 int main()
 {
-    BankAccount ** list = readAccounts();
-    
-    sortAccounts(list);
-    displayAccounts(list);
-    updateAccounts(list);
-    cout << endl << endl;
-    cout << "               ************************************************" << endl;
-    cout << "               * REAFFICHAGE DES DONNEES APRES LA MISE A JOUR *" << endl;
-    cout << "               ************************************************" << endl;
-    displayAccounts(list);
-    cout << endl;
+     BankAccount **list = readAccounts();
 
-	system("PAUSE");
-	return 0;
+     sortAccounts(list);
+     displayAccounts(list);
+     updateAccounts(list);
+     cout << endl
+          << endl;
+     cout << "               ************************************************" << endl;
+     cout << "               * REAFFICHAGE DES DONNEES APRES LA MISE A JOUR *" << endl;
+     cout << "               ************************************************" << endl;
+     displayAccounts(list);
+     cout << endl;
+
+     system("PAUSE");
+     return 0;
 }
