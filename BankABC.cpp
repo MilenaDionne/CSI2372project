@@ -5,6 +5,14 @@
 //
 //   Mohamed TALEB
 //
+//  Authors : 
+// Mitchell Chatterjee - 
+// Milena Dionne - 8916596
+// Adittya Imam - 8181736
+// Mathew George - 8248470
+
+//
+//
 // This program reads information about clients and transactions in the following 2 files:
 //          - clients.txt
 //          - transact.txt
@@ -203,12 +211,6 @@ void sortAccounts(BankAccount **listAccounts)
 {
 
      BankAccount **ptr = listAccounts;
-
-     // while (*ptr) {
-     //      cout << "here" << endl;
-     //      cout << ptr << endl;
-     //      ptr++;
-     // }
 
      int flag = 1;
      BankAccount *temp;
