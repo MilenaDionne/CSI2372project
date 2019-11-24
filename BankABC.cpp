@@ -209,7 +209,7 @@ void sortAccounts(BankAccount **listAccounts)
      //      cout << ptr << endl;
      //      ptr++;
      // }
-     
+
      int flag = 1;
      BankAccount *temp;
      //sorting ascending order
@@ -247,7 +247,7 @@ BankAccount **readAccounts()
           cout << "File not found !!!" << endl;
           exit(0);
      }
-     
+
      BankAccount **listAccounts = new BankAccount *[K_SizeMax];
      if (!listAccounts)
      {
@@ -386,9 +386,40 @@ void LoanAccount::executeTransaction(const Transaction trans)
 // Inputs: listAccount (type BankAccount *), the list of bank accounts.
 // Output: Nothing.
 //*************************************************************************
+
+
 void updateAccounts(BankAccount **listAccounts)
 {
-     ifstream inputFile("transact.txt"); // Opening the input file
+
+     int flag = 1;
+     ifstream inputFile("TRANSACT.txt"); // Opening the input file
+     if (!inputFile)                    // If the file is not found...
+     {
+          cout << "File not found !!!" << endl;
+          exit(0);
+     }
+
+     long accountRead, dateRead;
+     int TypeRead, nbyearRead, counter = 0;
+     double balanceRead, RateRead;
+     char nameRead[60];
+
+     inputFile >> accountRead >> TypeRead >> dateRead >> balanceRead >> nbyearRead >> RateRead;
+     inputFile.getline(nameRead, 60);
+
+     while (inputFile && (counter < K_SizeMax - 1))
+     {
+         for (int i = 0; listAccounts[i] && flag; i++) {
+             if(listAccounts[i]->getAccountId() == accountRead && listAccounts[i]->getType() == TypeRead) {
+                listAccounts[i]->setBalance(balanceRead);
+                listAccounts[i]->setUpdateDate(dateRead);
+                //downcasting
+             }
+         }
+
+         counter++;
+     }
+
 }
 
 BankAccount* runDynamicCast( BankAccount *currentVal ) {
