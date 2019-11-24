@@ -229,12 +229,6 @@ void sortAccounts(BankAccount **listAccounts)
                }
           }
      }
-     //list Account = ascending list pointer to pointer
-     cout << "account Id's" << endl;
-     for (int i = 0; listAccounts[i]; i++)
-     {
-          cout << listAccounts[i]->getAccountId() << "\t";
-     }
 }
 
 //******************************************************************
@@ -428,6 +422,16 @@ void updateAccounts(BankAccount **listAccounts)
 
 }
 
+BankAccount* runDynamicCast( BankAccount *currentVal ) {
+     if (currentVal->isLoanAccount()){
+          return dynamic_cast<LoanAccount *> (currentVal);
+     } else if (currentVal->isDepositAccount()){
+          return dynamic_cast<DepositAccount *> (currentVal);
+     }
+     
+     return dynamic_cast<BankAccount *> (currentVal);
+}
+
 //******************************************************************************
 // Purpose: This function displays the list of bank accounts for all customers.
 //
@@ -451,19 +455,41 @@ void displayAccounts(BankAccount **listAccounts)
           << endl;
      int i = 0;
 
-     //while (i < sizeof(listAccounts)-1){ //(7 account in .txt)
-     //    cout<< listAccounts[i]<< endl; //need to change -> don't know how to print values at this adresse, only adress printed
-     //    i++;
-     //}
+     for (int i = 1; listAccounts[i]; i++) {
+          BankAccount *currentVal = runDynamicCast( listAccounts[i] );
+
+          cout << "Client Name: " <<  currentVal->getClientName() << endl << endl;
+          cout << "Bank Account" << "\t\t" << "Type" << "\t" << "Update Date" << "\t" << "Balance" << "\t\t" << "Nb.Years" << "\t" << "Rate" << endl;
+          cout << "-------------" << "\t\t" << "------" << "\t" << "-----------" << "\t" << "-------" << "\t\t" << "-----------" << "\t" << "------" << endl;
+          currentVal->print();
+          cout << endl; 
+
+          double totalAccountValue = currentVal->getBalance();
+           
+
+          // This loop is meant to print out the subsequent elements of one client          
+          for (int j = i+1; listAccounts[j]; j++) {
+               if (listAccounts[i]->getAccountId() != listAccounts[j]->getAccountId()) {
+                    break;
+               }
+               currentVal = runDynamicCast( listAccounts[j] );
+
+               // Regular print all the values
+               currentVal->print();
+               cout << endl;
+               totalAccountValue += currentVal->getBalance();
+               i++;
+          }
+          cout << "\t\t\t\t\t        -------------" << endl;
+          cout << "\tTOTAL ACCOUNTS: " << totalAccountValue << endl << endl << endl;
+     }
+     cout << " THE REPORT OF THE BANK ACCOUNTS OF CLIENTS" << endl;
 }
 
 int main()
 {
     BankAccount ** list = readAccounts();
-    //cout << list << endl;
-    //BankAccount *ptr = *list;
-     //ptr->print();
-
+    
     sortAccounts(list);
     displayAccounts(list);
     updateAccounts(list);
