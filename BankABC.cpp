@@ -6,11 +6,10 @@
 //   Mohamed TALEB
 //
 //  Authors : 
-// Mitchell Chatterjee - 
-// Milena Dionne - 8916596
-// Adittya Imam - 8181736
-// Mathew George - 8248470
-
+//  Mitchell Chatterjee - 8598617
+//  Milena Dionne - 8916596
+//  Adittya Imam - 8181736
+//  Mathew George - 8248470
 //
 //
 // This program reads information about clients and transactions in the following 2 files:
@@ -214,8 +213,8 @@ void sortAccounts(BankAccount **listAccounts)
 
      int flag = 1;
      BankAccount *temp;
-     //sorting ascending order
-     //we need to get the id value of the double pointer listAccount and then use this code
+     // Sorting ascending order
+     // We need to get the id value of the double pointer listAccount and then use this code
      // Ensure that the value is not null at listAccounts[i] and listAccounts[j]
      for (int i = 0; listAccounts[i] && flag; i++)
      {
@@ -270,16 +269,17 @@ BankAccount **readAccounts()
      while (inputFile && (counter < K_SizeMax - 1))
      {
           // YOU HAVE TO DO SOMETHING FROM HERE !!!
-          if (TypeRead == 03)
+          // Create accounts depending on the different types 
+          if (TypeRead == 03) //create term deposit account 
           {
-               *pAccount = new DepositAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead, nbyearRead);
+               *pAccount = new DepositAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead, nbyearRead); 
           }
-          else if (TypeRead == 04)
+          else if (TypeRead == 04) //create loan account 
           {
                balanceRead = balanceRead + ((balanceRead * nbyearRead * RateRead) / 36000);
-               *pAccount = new LoanAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead, nbyearRead, RateRead);
+               *pAccount = new LoanAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead, nbyearRead, RateRead); //
           }
-          else
+          else //create checking and saving account
           {
                *pAccount = new BankAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead);
           }
