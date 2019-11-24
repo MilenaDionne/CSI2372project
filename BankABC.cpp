@@ -480,7 +480,7 @@ void updateAccounts(BankAccount **listAccounts)
 }
 
 BankAccount *runDynamicCast(BankAccount *currentVal)
-{
+{ //help method to implement updateAccounts
      if (currentVal->isLoanAccount())
      {
           return dynamic_cast<LoanAccount *>(currentVal);
